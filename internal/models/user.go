@@ -14,12 +14,13 @@ type User struct {
 	Name      string         `gorm:"not null" json:"name"`
 	Phone     string         `gorm:"" json:"phone"`
 	Status    string         `gorm:"default:active" json:"status"` // active, inactive, suspended
+	RoleID    uint           `gorm:"not null" json:"role_id"`
 	CreatedAt time.Time      `json:"created_at"`
 	UpdatedAt time.Time      `json:"updated_at"`
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
 
 	// Relationships
-	Roles      []Role      `gorm:"many2many:user_roles;" json:"roles,omitempty"`
+	Role       Role        `gorm:"foreignKey:RoleID" json:"roles,omitempty"`
 	Warehouses []Warehouse `gorm:"many2many:user_warehouses;" json:"warehouses,omitempty"`
 }
 

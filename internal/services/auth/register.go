@@ -33,17 +33,15 @@ func Register(req *dto.RegisterRequest) (*dto.RegisterResponse, error) {
 		Name:     req.Name,
 		Phone:    req.Phone,
 		Status:   "active",
+		RoleID:   1, // Default role ID (user)
 	}
 
 	if err := config.DB.Create(&user).Error; err != nil {
 		return nil, err
 	}
 
-	// Assign default role (optional - you can create a default role first)
-	// var defaultRole models.Role
-	// if err := config.DB.Where("name = ?", "user").First(&defaultRole).Error; err == nil {
-	// 	config.DB.Model(&user).Association("Roles").Append(&defaultRole)
-	// }
+	// Fetch the role to include in response if needed, or just rely on ID
+	// For now, we just proceed.
 
 	return &dto.RegisterResponse{
 		User: dto.UserDTO{

@@ -2,6 +2,7 @@ package utils
 
 import (
 	"errors"
+	"strconv"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -35,7 +36,7 @@ func GenerateAccessToken(userID uint, email, role, secret string, expiration tim
 // GenerateRefreshToken generates a new JWT refresh token
 func GenerateRefreshToken(userID uint, secret string, expiration time.Duration) (string, error) {
 	claims := jwt.RegisteredClaims{
-		Subject:   string(rune(userID)),
+		Subject:   strconv.FormatUint(uint64(userID), 10),
 		ExpiresAt: jwt.NewNumericDate(time.Now().Add(expiration)),
 		IssuedAt:  jwt.NewNumericDate(time.Now()),
 		NotBefore: jwt.NewNumericDate(time.Now()),

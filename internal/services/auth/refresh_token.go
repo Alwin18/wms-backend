@@ -58,8 +58,8 @@ func RefreshToken(req *dto.RefreshTokenRequest) (*dto.RefreshTokenResponse, erro
 
 	// Get user's role
 	var role string
-	if err := config.DB.Model(&user).Association("Roles").Find(&user.Roles); err == nil && len(user.Roles) > 0 {
-		role = user.Roles[0].Name
+	if err := config.DB.Model(&user).Association("Role").Find(&user.Role); err == nil {
+		role = user.Role.Name
 	} else {
 		role = "user"
 	}

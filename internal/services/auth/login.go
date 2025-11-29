@@ -15,7 +15,7 @@ func Login(req *dto.LoginRequest) (*dto.LoginResponse, error) {
 	var user models.User
 
 	// Find user by email
-	if err := config.DB.Where("email = ?", req.Email).First(&user).Error; err != nil {
+	if err := config.DB.Where("email = ?", req.Email).Preload("Role").First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("invalid email or password")
 		}
@@ -32,19 +32,11 @@ func Login(req *dto.LoginRequest) (*dto.LoginResponse, error) {
 		return nil, errors.New("invalid email or password")
 	}
 
-	// Get user's first role (simplified for now)
-	var role string
-	if err := config.DB.Model(&user).Association("Roles").Find(&user.Roles); err == nil && len(user.Roles) > 0 {
-		role = user.Roles[0].Name
-	} else {
-		role = "user" // default role
-	}
-
 	// Generate access token
 	accessToken, err := utils.GenerateAccessToken(
 		user.ID,
 		user.Email,
-		role,
+		user.Role.Name,
 		config.GlobalConfig.JWT.Secret,
 		config.GlobalConfig.JWT.AccessTokenExp,
 	)
