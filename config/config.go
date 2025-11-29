@@ -80,7 +80,7 @@ func LoadConfig() *Config {
 			Host:     getEnv("DB_HOST", "localhost"),
 			Port:     getEnv("DB_PORT", "5432"),
 			User:     getEnv("DB_USER", "postgres"),
-			Password: getEnv("DB_PASSWORD", "postgres"),
+			Password: getEnv("DB_PASSWORD", "password"),
 			DBName:   getEnv("DB_NAME", "wms_db"),
 			SSLMode:  getEnv("DB_SSLMODE", "disable"),
 			Timezone: getEnv("DB_TIMEZONE", "Asia/Jakarta"),

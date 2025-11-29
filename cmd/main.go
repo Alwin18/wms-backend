@@ -13,14 +13,13 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func main() {
-	// Bootstrap application
+// Initialize untuk test
+func Initialize() (*config.Application, error) {
 	app, err := config.Bootstrap()
 	if err != nil {
-		log.Fatal("Failed to bootstrap application:", err)
+		return nil, err
 	}
 
-	// Run database migrations
 	if err := config.AutoMigrate(
 		app.DB,
 		&models.User{},
@@ -29,11 +28,19 @@ func main() {
 		&models.AuditLog{},
 		&models.Warehouse{},
 	); err != nil {
-		log.Fatal("Failed to migrate database:", err)
+		return nil, err
 	}
 
-	// Setup routes
 	setupRoutes(app.Fiber)
+
+	return app, nil
+}
+
+func main() {
+	app, err := Initialize()
+	if err != nil {
+		log.Fatal("Failed to initialize:", err)
+	}
 
 	// Start server
 	go func() {

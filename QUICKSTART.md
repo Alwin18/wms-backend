@@ -225,3 +225,10 @@ curl -X POST http://localhost:8080/api/v1/auth/logout \
 ## License
 
 MIT
+
+## COVERAGE
+```
+gcov2lcov -infile test/coverage/coverage.out -outfile test/coverage/coverage.lcov
+genhtml test/coverage/coverage.lcov --output-dir coverage-html 
+
+```

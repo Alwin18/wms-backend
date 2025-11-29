@@ -20,12 +20,18 @@ func InitFiber(cfg *Config) *fiber.App {
 	app.Use(requestid.New())
 
 	// CORS
-	app.Use(cors.New(cors.Config{
-		AllowOrigins:     cfg.CORS.AllowedOrigins,
-		AllowMethods:     "GET,POST,PUT,PATCH,DELETE,OPTIONS",
-		AllowHeaders:     "Origin,Content-Type,Accept,Authorization",
-		AllowCredentials: true,
-	}))
+	corsConfig := cors.Config{
+		AllowOrigins: cfg.CORS.AllowedOrigins,
+		AllowMethods: "GET,POST,PUT,PATCH,DELETE,OPTIONS",
+		AllowHeaders: "Origin,Content-Type,Accept,Authorization",
+	}
+
+	// Only set AllowCredentials to true if not using wildcard
+	if cfg.CORS.AllowedOrigins != "*" {
+		corsConfig.AllowCredentials = true
+	}
+
+	app.Use(cors.New(corsConfig))
 
 	return app
 }
